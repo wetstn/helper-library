@@ -1,0 +1,30 @@
+# Unpaired t-test
+# Set variables for test of differences
+numeric_vars <- c("age", "height_in", "preop_weight_lbs", "preop_bmi", "asa",
+                  "target_levels", "levels_incise", "length_of_closure_cm", 
+                  "instrumentation_levels", "procedure_duration", 
+                  "ebl", "number_drains", "drain_duration_days", "los_days", 
+                  "fu_period_mo")
+
+# Paraspinous T-test
+# Create an empty data frame to store results
+para_t_table <- 
+  data.frame(variable = character(), 
+             p_value = numeric(), 
+             stringsAsFactors = FALSE)
+
+# Loop through each numeric variable
+for (numeric_var in numeric_vars) {
+  # Perform t-test
+  para_t_test_result <- 
+    t.test(get(numeric_var) ~ any_complication_adjusted, 
+           data = para_df)
+  
+  # Extract p-value
+  p_value <- para_t_test_result$p.value
+  
+  # Append results to the data frame
+  para_t_table <- 
+    rbind(para_t_table, data.frame(variable = numeric_var, 
+                                   p_value = p_value))
+}
