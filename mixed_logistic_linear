@@ -1,0 +1,53 @@
+#-----------------------------------------------------------
+# Trapezius univariate logistic/linear regression
+#-----------------------------------------------------------
+tu2_result_df <- data.frame(variable = character(), 
+                            response_variable = character(), 
+                            p_value = numeric(), 
+                            stringsAsFactors = FALSE)
+
+for (response_var in response_vars) {
+  for (predictor_var in predictor_vars) {
+    formula <- as.formula(paste(response_var, "~", predictor_var))
+    
+        trap_df_linear <- trap_df %>%
+      mutate_at(vars(vars_to_factor), as.numeric)
+    
+    if (predictor_var %in% c("age", "asa", "preop_bmi",
+                             "target_levels", "levels_incise", 
+                             "instrumentation_levels",
+                             "length_of_closure_cm", "procedure_duration",
+                             "ebl", "number_drains", "drain_duration_days",
+                             "los_days")) {
+      linear_model <- 
+        lm(formula, data = trap_df_linear)
+      p_value <- summary(linear_model)$coefficients[, "Pr(>|t|)"][2]
+      
+      trap_df_linear <- trap_df_linear %>%
+        mutate_at(vars(vars_to_factor), as.factor)
+    } else {
+      
+      trap_df_logistic <- trap_df %>%
+        mutate_at(vars(vars_to_factor), as.factor)
+      
+      logistic_model <- 
+        glm(formula, data = trap_df_logistic, family = "binomial")
+      p_value <- tidy(logistic_model)$p.value[2]
+    }
+    
+    tu2_result_df <- rbind(tu2_result_df, data.frame(
+      variable = predictor_var, 
+      response_variable = response_var, p_value = p_value))
+  }
+}
+
+tu2_result_df$response_variable <- 
+  factor(tu2_result_df$response_variable,
+         levels = c("ssi", "dehiscence", "seroma", 
+                    "csf_leak", "necrosis", "reoperation", 
+                    "mortality", "los_days",
+                    "any_complication_adjusted"))
+
+tu2_wide_result <- 
+  tidyr::spread(tu2_result_df, 
+                key = response_variable, value = p_value)
