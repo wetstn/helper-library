@@ -1,0 +1,28 @@
+#-----------------------------------------------------------
+# Trapezius closure length logistic regression
+#-----------------------------------------------------------
+# Univariate regression
+tu_result_df <- data.frame(variable = character(), 
+                           response_variable = character(), 
+                           p_value = numeric(), 
+                           stringsAsFactors = FALSE)
+
+for (response_var in response_vars) {
+  for (predictor_var in predictor_vars) {
+    formula <- as.formula(paste(response_var, "~", predictor_var))
+    logistic_model <- glm(formula, data = trap_df, 
+                          family = "binomial")
+    p_value <- tidy(logistic_model)$p.value[2]
+    tu_result_df <- rbind(tu_result_df, data.frame(
+      variable = predictor_var, 
+      response_variable = response_var, p_value = p_value))
+  }
+}
+
+tu_result_df$response_variable <- 
+  factor(tu_result_df$response_variable,
+         levels = c("ssi", "dehiscence", "seroma", "reoperation", 
+                    "mortality", "any_complication_adjusted", 
+                    "csf_leak", "necrosis"))
+tu_wide_result <- 
+  tidyr::spread(tu_result_df, key = response_variable, value = p_value)
