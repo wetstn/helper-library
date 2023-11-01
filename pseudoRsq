@@ -1,0 +1,16 @@
+# Test the performance of the multivariate logistic regression model with pseudo R-squared
+
+# Obtain the predicted probabilities
+predicted_probabilities <- predict(model, type = "response")
+
+# Create a data frame with actual and predicted values
+results <- data.frame(Actual = schwan_df$tumor_ecog_fu == 0, Predicted = predicted_probabilities)
+
+# Create a confusion matrix
+conf_matrix <- table(results$Actual, results$Predicted > 0.5)
+
+# Calculate Nagelkerke's R-squared
+nagelkerke_r2 <- 1 - (-(2 * logLik(model)) / (2 * logLik(null_model <- glm(tumor_ecog_fu == 0 ~ 1, data = schwan_df, family = "binomial"))))^2 / (1 + (-(2 * logLik(null_model)) / nrow(schwan_df)))^(2 / nrow(schwan_df))
+
+# Print the result
+cat("Nagelkerke's R-squared:", nagelkerke_r2, "\n")
