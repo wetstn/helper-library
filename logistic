@@ -1,6 +1,3 @@
-#-----------------------------------------------------------
-# Trapezius closure length logistic regression
-#-----------------------------------------------------------
 # Univariate regression
 tu_result_df <- data.frame(variable = character(), 
                            response_variable = character(), 
