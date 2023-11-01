@@ -1,0 +1,46 @@
+# Chi-Squared Analysis
+# Set variables for test of differences
+categorical_vars <- c("this", "that", "etc.")
+
+# Create an empty data frame to store results
+para_chi_table <- 
+  data.frame(variable = character(), 
+             p_value = numeric(), 
+             stringsAsFactors = FALSE)
+
+# Loop through each categorical variable
+for (categorical_var in categorical_vars) {
+  # Perform chi-square test
+  chi_square_result <- 
+    chisq.test(table(para_df[[categorical_var]], 
+                     para_df$any_complication_adjusted))
+  
+  # Extract p-value
+  p_value <- chi_square_result$p.value
+  
+  # Append results to the data frame
+  para_chi_table <- 
+    rbind(para_chi_table, data.frame(variable = categorical_var, 
+                                p_value = p_value))
+}
+
+# Write the chi-squared data frame to the shared Google Drive
+write_sheet(para_chi_table, ss = "https://docs.google.com/spreadsheets/d/1WHrE_KVeMVXIVz9mKMip50OcOwi6l7AwWz0ikqQxTkU/edit?usp=sharing", sheet = "para_chi_table")
+
+# Trapezius chi-squared
+trap_chi_table <- 
+  data.frame(variable = character(), 
+             p_value = numeric(), 
+             stringsAsFactors = FALSE)
+
+for (categorical_var in categorical_vars) {
+  chi_square_result <- 
+    chisq.test(table(trap_df[[categorical_var]], 
+                     trap_df$any_complication_adjusted))
+  
+    p_value <- chi_square_result$p.value
+  
+    trap_chi_table <- 
+    rbind(trap_chi_table, data.frame(variable = categorical_var, 
+                                     p_value = p_value))
+}
