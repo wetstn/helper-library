@@ -1,0 +1,16 @@
+# Model performance for a multivariate Poisson regression
+null_model <- glm(daily_deaths ~ 1, family = poisson, data = country_df)
+
+# Calculate deviance for the null model
+null_deviance <- null_model$deviance
+
+# Calculate deviance for the fitted model
+fitted_deviance <- poisson_model$deviance
+
+# Calculate the difference in deviance
+deviance_difference <- null_deviance - fitted_deviance
+
+# Print the results
+print(paste("Null Deviance:", null_deviance))
+print(paste("Fitted Deviance:", fitted_deviance))
+print(paste("Deviance Difference:", deviance_difference))
