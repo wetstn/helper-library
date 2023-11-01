@@ -1,0 +1,9 @@
+# ANOVA for testing tumor size as a dependent on region
+# Fit one-way ANOVA model
+anova_model <- aov(largest_dimension ~ region, data = schwan_df)
+
+summary(anova_model)
+
+schwan_df %>% aov(largest_dimension ~ region, data = .) %>% 
+    TukeyHSD() # %>% hashing out the pipe will print the results nice nice
+    plot()
