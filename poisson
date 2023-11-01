@@ -1,9 +1,8 @@
 # Load necessary libraries
 library(dplyr)
 library(stats)
-
 # ------------------------------------------------------------------------------
-# Multivariate Poisson regression reults
+# Multivariate Poisson regression results
 # ------------------------------------------------------------------------------
 
 # Fit Poisson regression model
