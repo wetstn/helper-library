@@ -1,4 +1,5 @@
 # Model performance for a multivariate Poisson regression
+# Test against a null model
 null_model <- glm(daily_deaths ~ 1, family = poisson, data = country_df)
 
 # Calculate deviance for the null model
@@ -10,7 +11,19 @@ fitted_deviance <- poisson_model$deviance
 # Calculate the difference in deviance
 deviance_difference <- null_deviance - fitted_deviance
 
-# Print the results
 print(paste("Null Deviance:", null_deviance))
 print(paste("Fitted Deviance:", fitted_deviance))
 print(paste("Deviance Difference:", deviance_difference))
+
+# Other tests for performance of Poisson include the following
+#AIC (Akaike Information Criterion) or BIC (Bayesian Information Criterion):
+aic <- AIC(poisson_model)
+bic <- BIC(poisson_model)
+
+print(paste("AIC:", aic))
+print(paste("BIC:", bic))
+
+# 2. Likelihood ratio test
+lr_test <- lrtest(null_model, poisson_model)
+
+print(lr_test)
