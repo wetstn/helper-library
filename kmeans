@@ -1,0 +1,15 @@
+# Perform k-means clustering
+k <- 5  # Number of clusters
+kmeans_result <- kmeans(schwan_df[, c("level", "largest_dimension")], centers = k)
+
+# Add cluster information to the data frame
+schwan_df$cluster <- as.factor(kmeans_result$cluster)
+
+# Plot the data with clusters
+k_cluster <- plot(schwan_df$largest_dimension, col = schwan_df$cluster, main = "Tumor Clustering around Spinal Levels", xlab = "Tumor Size", ylab = "Spinal Level")
+points(kmeans_result$centers[, 2], col = 1:k, pch = 8, cex = 2)
+legend("topright", legend = 1:k, col = 1:k, pch = 8, title = "Cluster")
+
+k_cluster + coord_cartesian(xlim = c(0, 12), ylim = c(0, 0.5))
+
+print(k_cluster)
