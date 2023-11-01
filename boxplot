@@ -1,0 +1,28 @@
+box_sch <- ggboxplot(schwan_df, x = "region", y = "largest_dimension", outlier.shape = 1, outlier.size = 4, fill = "region", palette = "ucscgb") +
+  stat_summary(fun = mean, geom = "point", shape = 16, size = 5, color = "#b80404") +
+  labs(title = "Boxplots of Tumor Size by Region", x = "Region", y = "Tumor Size (cm)") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 20),  # Adjust x-axis text size
+        axis.text.y = element_text(size = 20),  # Adjust y-axis text size
+        axis.title.x = element_text(size = 20),  # Adjust x-axis title size
+        axis.title.y = element_text(size = 20),  # Adjust y-axis title size
+        plot.title = element_text(size = 20),  # Adjust plot title size
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank(),
+        axis.line = element_line(color = "black"),
+        panel.background = element_rect(fill = "white"),
+        aspect.ratio = 1) +
+        geom_bracket(
+        xmin = c("High Cervical", "Lumbar", "Sacral/Coccygeal"), xmax = c("Sacral/Coccygeal", "Sacral/Coccygeal", "Thoracic"),
+        y.position = c(12.25, 10.75, 11.5), label = c("5.9e-2", "4.9e-3", "1.2e-2"),
+        tip.length = 0.01, label.size = 5) + 
+        coord_cartesian(ylim = c(0, 12.5))
+
+box_sch <- box_sch +
+  theme(legend.position = "top",  # Position the legend at the top
+        legend.title = element_text(size = 0),  # Adjust legend title size
+        legend.text = element_text(size = 14),  # Adjust legend text size
+        legend.key.size = unit(2, "cm"))  # Adjust legend key size (increase or decrease as needed)
+
+plot(box_sch)
