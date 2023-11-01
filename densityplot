@@ -1,0 +1,27 @@
+sch_theme <- theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 20),  # Adjust x-axis text size
+    axis.text.y = element_text(size = 20),  # Adjust y-axis text size
+    axis.title.x = element_text(size = 20),  # Adjust x-axis title size
+    axis.title.y = element_text(size = 20),  # Adjust y-axis title size
+    plot.title = element_text(size = 20),  # Adjust plot title size
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.border = element_blank(),
+    axis.line = element_line(color = "black"),
+    panel.background = element_rect(fill = "white"),
+    aspect.ratio = 1
+  )
+
+den_sch <- ggdensity(schwan_df, x = "largest_dimension", fill = "region", palette = "ucscgb") +
+  labs(title = "Density Plot of Tumor Size by Region", x = "Tumor Size (cm)", y = "Density", fill = "Region") +
+  sch_theme +
+  coord_cartesian(xlim = c(0, 12), ylim = c(0, 0.5))
+
+den_sch + theme(legend.spacing.x = unit(0.5, "cm")) +  
+ theme(legend.position = "top",  # Position the legend at the top
+        legend.title = element_text(size = 0),  # Adjust legend title size
+        legend.text = element_text(size = 16),  # Adjust legend text size
+        legend.key.size = unit(1, "cm"))
+
+plot(den_sch)
